@@ -4,15 +4,19 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  with_options presence: true do
-    validates :nickname
-    validates :last_name, format: { with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/, allow_blank: true }
-    validates :first_name, format: { with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/, allow_blank: true }
-    validates :last_name_kana, format: { with: /\A[ァ-ヶー]+\z/, allow_blank: true }
-    validates :first_name_kana, format: { with: /\A[ァ-ヶー]+\z/, allow_blank: true }
-    validates :birthday
+  VALID_PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i.freeze
+  validates_format_of :password, with: VALID_PASSWORD_REGEX, message: 'は半角英数字混合で設定してください'
+
+  with_options presence: true, format: { with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/, message: 'は全角ひらがな、全角カタカナ、漢字で入力してください' } do
+    validates :last_name
+    validates :first_name
   end
-  
-  VALID_PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?[\d])[a-z\d]+\z/i.freeze
-  validates :password, format: { with: VALID_PASSWORD_REGEX, allow_blank: true } 
+
+  with_options presence: true, format: { with: /\A[ァ-ヶー]+\z/, message: 'は全角カタカナで入力してください' } do
+    validates :last_name_kana
+    validates :first_name_kana
+  end
+
+  validates :nickname, presence: true
+  validates :birthday, presence: true
 end
