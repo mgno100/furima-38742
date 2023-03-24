@@ -4,7 +4,6 @@ RSpec.describe Item, type: :model do
   describe '#create' do
     before do
       @item = FactoryBot.build(:item)
-      @item.image = fixture_file_upload("/image_0041.jpg")
     end
     
     context '出品した商品が保存できるとき' do
@@ -121,8 +120,13 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Item price can't be blank")
       end
-      it 'item_priceが、300~9999999の間以外の場合は保存できない' do
+      it 'item_priceが300未満の場合は保存できない' do
         @item.item_price = '100'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Item price is out of setting range")
+      end
+      it 'item_priceが9999999以上の場合は保存できない' do
+        @item.item_price = '100000000'
         @item.valid?
         expect(@item.errors.full_messages).to include("Item price is out of setting range")
       end
@@ -131,11 +135,12 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Item price is invalid. Input half-width characters")
       end
-
+      it 'userが紐付いていない場合は保存できない' do
+        @item.user = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include('User must exist')
+      end
     end
     end
-    
-
-
   end
 end
