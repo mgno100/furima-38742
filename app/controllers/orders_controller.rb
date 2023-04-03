@@ -6,6 +6,7 @@ class OrdersController < ApplicationController
   end
 
   def create
+    binding.pry
     @order_residence = OrderResidence.new(order_params)
     if @order_residence.valid?
       @order_residence.save
@@ -18,6 +19,6 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order_residence).permit(:postal_code, :prefecture_id, :city, :addresses, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id])
+    params.require(:order_residence).permit(:postal_code, :prefecture_id, :city, :addresses, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
   end
 end
