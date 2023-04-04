@@ -1,12 +1,12 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user! 
+  before_action :set_item_date, only: [:index, :create]
 
   def index
     @order_residence = OrderResidence.new
   end
 
   def create
-    @item = Item.find(params[:item_id])
     @order_residence = OrderResidence.new(order_params)
     if @order_residence.valid?
       pay_item
@@ -30,5 +30,9 @@ class OrdersController < ApplicationController
       card: order_params[:token],
       currency: 'jpy'
     )
+  end
+
+  def set_item_date
+    @item = Item.find(params[:item_id])
   end
 end
