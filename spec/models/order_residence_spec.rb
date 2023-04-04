@@ -9,7 +9,7 @@ RSpec.describe OrderResidence, type: :model do
     end
 
     context '配送先の住所が保存できるとき'  do
-      it 'postal_code、prefecture_id、city、addresses、building、phone_number、user_id、item_idが存在すれば保存できる' do
+      it 'postal_code、prefecture_id、city、addresses、building、phone_number、user_id、item_id、tokenが存在すれば保存できる' do
         expect(@order_residence).to be_valid
       end
 
@@ -109,6 +109,12 @@ RSpec.describe OrderResidence, type: :model do
           @order_residence.item_id = nil
           @order_residence.valid?
           expect(@order_residence.errors.full_messages).to include("Item can't be blank")
+        end
+
+        it 'tokenが空では保存できない' do
+          @order_residence.token = nil
+          @order_residence.valid?
+          expect(@order_residence.errors.full_messages).to include("Token can't be blank")
         end
       end
     end
