@@ -6,6 +6,7 @@ class OrdersController < ApplicationController
   end
 
   def create
+    @item = Item.find(params[:item_id])
     @order_residence = OrderResidence.new(order_params)
     if @order_residence.valid?
       pay_item
