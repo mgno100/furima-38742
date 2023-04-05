@@ -19,7 +19,7 @@ RSpec.describe OrderResidence, type: :model do
       end
 
       it 'buildingは空でも保存できる' do
-        @order_residence.building = ''
+        @order_residence.building = nil
         expect(@order_residence).to be_valid
       end
 
