@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user! 
-  before_action :set_item_date, only: [:index, :create]
+  before_action :decision_item, only: [:index, :create]
 
   def index
     @order_residence = OrderResidence.new
@@ -32,7 +32,10 @@ class OrdersController < ApplicationController
     )
   end
 
-  def set_item_date
+  def decision_item
     @item = Item.find(params[:item_id])
+    if current_user.id == @item.user_id || @item.order.present?
+      redirect_to root_path
+    end
   end
 end
