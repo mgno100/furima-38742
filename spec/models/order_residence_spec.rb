@@ -32,6 +32,7 @@ RSpec.describe OrderResidence, type: :model do
         @order_residence.phone_number = '01234567891'
         expect(@order_residence).to be_valid
       end
+    end
 
       context '配送先の住所が保存できないとき' do
         it 'postal_codeが空では保存できない' do
@@ -117,6 +118,5 @@ RSpec.describe OrderResidence, type: :model do
           expect(@order_residence.errors.full_messages).to include("Token can't be blank")
         end
       end
-    end
   end
 end
